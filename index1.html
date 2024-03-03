@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Numbers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #output {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #letters {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #presence {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Random Numbers Between 1 and 10 (Rounded)</h1>
+        <div id="output"></div>
+        <div id="letters"></div>
+        <div id="presence">All letters present: </div>
+        <button id="generateBtn">Generate Numbers</button>
+        <button id="copyNumbersBtn">Copy Numbers</button>
+        <button id="copyLettersBtn">Copy Letters</button>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const generateBtn = document.getElementById("generateBtn");
+            const copyNumbersBtn = document.getElementById("copyNumbersBtn");
+            const copyLettersBtn = document.getElementById("copyLettersBtn");
+            const outputDiv = document.getElementById("output");
+            const lettersDiv = document.getElementById("letters");
+            const presenceDiv = document.getElementById("presence");
+
+            generateBtn.addEventListener("click", function() {
+                // Generate 8 random numbers between 1 and 10 and round them
+                const randomNumbers = Array.from({ length: 10 }, () => Math.round(Math.random() * 9) + 1);
+                
+                // Display the random numbers
+                outputDiv.textContent = "" + randomNumbers.join(" ");
+                
+                // Assign letters to numbers
+                const letters = {
+                    'D': [1, 2],
+                    'F': [3, 4 ,5, 6],
+                    'G': [7],
+                    'C': [8,9],
+                    'E': [10]
+                };
+
+                // Display letters under the numbers
+                let lettersText = "";
+                let presentLetters = { 'D': false, 'F': false, 'G': false, 'C': false, 'E': false };
+                randomNumbers.forEach(number => {
+                    Object.entries(letters).forEach(([letter, nums]) => {
+                        if (nums.includes(number)) {
+                            lettersText += letter + " ";
+                            presentLetters[letter] = true;
+                        }
+                    });
+                });
+                lettersDiv.textContent = "" + lettersText.trim();
+
+                // Check if all letters are present
+                const allLettersPresent = Object.values(presentLetters).every(value => value);
+                presenceDiv.textContent = "All letters present: " + (allLettersPresent ? "Yes" : "No");
+            });
+
+            copyNumbersBtn.addEventListener("click", function() {
+                // Copy the generated numbers to the clipboard
+                const numbersToCopy = outputDiv.textContent;
+                navigator.clipboard.writeText(numbersToCopy).then(function() {
+                    
+                }).catch(function(error) {
+                    console.error("Failed to copy numbers: ", error);
+                });
+            });
+
+            copyLettersBtn.addEventListener("click", function() {
+                // Copy the assigned letters to the clipboard
+                const lettersToCopy = lettersDiv.textContent;
+                navigator.clipboard.writeText(lettersToCopy).then(function() {
+                    
+                }).catch(function(error) {
+                    console.error("Failed to copy letters: ", error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
